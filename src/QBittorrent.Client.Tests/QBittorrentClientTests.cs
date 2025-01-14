@@ -52,7 +52,7 @@ namespace QBittorrent.Client.Tests
         public QBittorrentClientTests(DockerFixture dockerFixture)
         {
             DockerFixture = dockerFixture;
-            Client = new QBittorrentClient(new Uri("http://localhost:8080"));
+            Client = new QBittorrentClient(new HttpClient(), new Uri("http://localhost:8080"));
         }
 
         public void Dispose()
@@ -119,7 +119,7 @@ namespace QBittorrent.Client.Tests
             try
             {
                 Console.WriteLine("\tEnsuring qBittorrent availability...");
-                using (var tempClient = new QBittorrentClient(new Uri("http://localhost:8080")))
+                using (var tempClient = new QBittorrentClient(new HttpClient(), new Uri("http://localhost:8080")))
                 {
                     await Utils.Retry(() => tempClient.LoginAsync(UserName, Password), delayMs: 500, attempts: 50);
                 }
@@ -2971,7 +2971,7 @@ namespace QBittorrent.Client.Tests
             };
             await Client.SetPreferencesAsync(setPrefs);
 
-            var newClient = new QBittorrentClient(new Uri("http://localhost:8080/"));
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("http://localhost:8080/"));
 
             try
             {
@@ -3020,7 +3020,7 @@ namespace QBittorrent.Client.Tests
             };
             await Client.SetPreferencesAsync(setPrefs);
 
-            var newClient = new QBittorrentClient(new Uri("http://localhost:8080/"));
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("http://localhost:8080/"));
             await newClient.LoginAsync("testuser", "testpassword");
 
             var newPrefs = await newClient.GetPreferencesAsync();
@@ -3057,7 +3057,7 @@ namespace QBittorrent.Client.Tests
             };
             await Client.SetPreferencesAsync(setPrefs);
 
-            var newClient = new QBittorrentClient(new Uri("http://localhost:9090/"));
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("http://localhost:9090/"));
             await newClient.LoginAsync(UserName, Password);
 
             var newPrefs = await newClient.GetPreferencesAsync();
@@ -3098,7 +3098,7 @@ namespace QBittorrent.Client.Tests
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; }
             };
-            var newClient = new QBittorrentClient(new Uri("https://localhost:9090/"), handler, true);
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("https://localhost:9090/"));
             await newClient.LoginAsync(UserName, Password);
 
             var newPrefs = await newClient.GetPreferencesAsync();
@@ -3141,7 +3141,7 @@ namespace QBittorrent.Client.Tests
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; }
             };
-            var newClient = new QBittorrentClient(new Uri("https://localhost:9090/"), handler, true);
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("https://localhost:9090/"));
             await newClient.LoginAsync(UserName, Password);
 
             var newPrefs = await newClient.GetPreferencesAsync();
@@ -3182,7 +3182,7 @@ namespace QBittorrent.Client.Tests
             };
             await Client.SetPreferencesAsync(setPrefs);
 
-            var newClient = new QBittorrentClient(new Uri("https://localhost:9090/"));
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("https://localhost:9090/"));
             await Assert.ThrowsAsync<HttpRequestException>(() => newClient.LoginAsync(UserName, Password));
         }
 
@@ -3211,7 +3211,7 @@ namespace QBittorrent.Client.Tests
             };
             await Client.SetPreferencesAsync(setPrefs);
 
-            var newClient = new QBittorrentClient(new Uri("https://localhost:9090/"));
+            var newClient = new QBittorrentClient(new HttpClient(), new Uri("https://localhost:9090/"));
             await Assert.ThrowsAsync<HttpRequestException>(() => newClient.LoginAsync(UserName, Password));
         }
 

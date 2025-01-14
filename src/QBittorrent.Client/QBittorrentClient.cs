@@ -41,57 +41,26 @@ namespace QBittorrent.Client
         /// Initializes a new instance of the <see cref="QBittorrentClient"/> class.
         /// </summary>
         /// <param name="uri">qBittorrent remote server URI.</param>
-        public QBittorrentClient([NotNull] Uri uri)
-            : this(uri, ApiLevel.Auto, new HttpClient())
+        /// <param name="httpClient">HttpClient</param>
+        public QBittorrentClient([NotNull] HttpClient httpClient, [NotNull] Uri uri)
+            : this(httpClient, uri, ApiLevel.Auto)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QBittorrentClient"/> class.
         /// </summary>
-        /// <param name="uri">qBittorrent remote server URI.</param>
-        /// <param name="apiLevel">qBittorrent API level.</param>
-        public QBittorrentClient([NotNull] Uri uri, ApiLevel apiLevel)
-            : this(uri, apiLevel, new HttpClient())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QBittorrentClient"/> class.
-        /// </summary>
-        /// <param name="uri">qBittorrent remote server URI.</param>
-        /// <param name="handler">Custom HTTP message handler.</param>
-        /// <param name="disposeHandler">The value indicating whether the <paramref name="handler"/> must be disposed when disposing this object.</param>
-        public QBittorrentClient([NotNull] Uri uri, HttpMessageHandler handler, bool disposeHandler)
-            : this(uri, ApiLevel.Auto, new HttpClient(handler, disposeHandler))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QBittorrentClient"/> class.
-        /// </summary>
-        /// <param name="uri">qBittorrent remote server URI.</param>
-        /// <param name="apiLevel">qBittorrent API level.</param>
-        /// <param name="handler">Custom HTTP message handler.</param>
-        /// <param name="disposeHandler">The value indicating whether the <paramref name="handler"/> must be disposed when disposing this object.</param>
-        public QBittorrentClient([NotNull] Uri uri, ApiLevel apiLevel, HttpMessageHandler handler, bool disposeHandler)
-            : this(uri, apiLevel, new HttpClient(handler, disposeHandler))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QBittorrentClient"/> class.
-        /// </summary>
+        /// <param name="httpClient">HttpClient</param>
         /// <param name="uri">The qBittorrent remote server URI.</param>
         /// <param name="apiLevel">The qBittorrent API level.</param>
         /// <param name="client">Custom <see cref="HttpClient"/> instance.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="uri"/> or <paramref name="client"/> is <see langword="null"/>.
         /// </exception>
-        private QBittorrentClient([NotNull] Uri uri, ApiLevel apiLevel, [NotNull] HttpClient client)
+        public QBittorrentClient([NotNull] HttpClient httpClient, [NotNull] Uri uri, ApiLevel apiLevel)
         {
             _uri = (uri ?? throw new ArgumentNullException(nameof(uri))).EnsureTrailingSlash();
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+            _client = httpClient;
             _client.DefaultRequestHeaders.ExpectContinue = true;
 
             _legacyVersion = new Cached<int>(GetLegacyApiVersionPrivateAsync);
