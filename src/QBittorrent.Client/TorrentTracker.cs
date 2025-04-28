@@ -28,7 +28,7 @@ namespace QBittorrent.Client
         /// Tracker URL
         /// </summary>
         [JsonProperty("url")]
-        public Uri Url { get; set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// Tracker status as string

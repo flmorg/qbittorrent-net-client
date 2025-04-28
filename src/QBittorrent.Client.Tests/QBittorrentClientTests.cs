@@ -549,7 +549,19 @@ namespace QBittorrent.Client.Tests
                 var trackers = await Client.GetTorrentTrackersAsync(torrent.OriginalInfoHash.ToLower());
                 trackers.Should().NotBeNull();
 
-                var trackerUrls = trackers.Where(t => t.Url.IsAbsoluteUri).Select(t => t.Url.AbsoluteUri).ToList();
+                var trackerUrls = trackers
+                    .Select(x =>
+                    {
+                        if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                        {
+                            return uri;
+                        }
+
+                        return null;
+                    })
+                    .Where(x => x is not null)
+                    .Where(x => x.IsAbsoluteUri)
+                    .Select(x => x.AbsoluteUri).ToList();
                 trackerUrls.Should().BeEquivalentTo(torrent.Trackers.SelectMany(x => x));
 
                 trackers.Select(t => t.Status).Should().NotContainNulls();
@@ -1916,7 +1928,18 @@ namespace QBittorrent.Client.Tests
             var tracker2 = new Uri("http://ipv6.torrent.ubuntu.com:6969/announce");
 
             var trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-            trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+            trackers
+                .Select(x =>
+                {
+                    if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                    {
+                        return uri;
+                    }
+
+                    return null;
+                })
+                .Where(x => x is not null)
+                .Where(url => url.IsAbsoluteUri)
                 .Should().BeEquivalentTo(tracker1, tracker2);
 
             var newTracker = new Uri("http://retracker.mgts.by:80/announce");
@@ -1925,7 +1948,18 @@ namespace QBittorrent.Client.Tests
             await Utils.Retry(async () =>
             {
                 trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-                trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+                trackers
+                    .Select(x =>
+                    {
+                        if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                        {
+                            return uri;
+                        }
+
+                        return null;
+                    })
+                    .Where(x => x is not null)
+                    .Where(url => url.IsAbsoluteUri)
                     .Should().BeEquivalentTo(tracker1, tracker2, newTracker);
             });
         }
@@ -1951,7 +1985,18 @@ namespace QBittorrent.Client.Tests
             var tracker2 = new Uri("http://ipv6.torrent.ubuntu.com:6969/announce");
 
             var trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-            trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+            trackers
+                .Select(x =>
+                {
+                    if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                    {
+                        return uri;
+                    }
+
+                    return null;
+                })
+                .Where(x => x is not null)
+                .Where(url => url.IsAbsoluteUri)
                 .Should().BeEquivalentTo(tracker1, tracker2);
 
             var newTracker = new Uri("http://retracker.mgts.by:80/announce");
@@ -1960,7 +2005,18 @@ namespace QBittorrent.Client.Tests
             await Utils.Retry(async () =>
             {
                 trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-                trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+                trackers
+                    .Select(x =>
+                    {
+                        if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                        {
+                            return uri;
+                        }
+
+                        return null;
+                    })
+                    .Where(x => x is not null)
+                    .Where(url => url.IsAbsoluteUri)
                     .Should().BeEquivalentTo(tracker1, tracker2, newTracker);
             });
 
@@ -1969,7 +2025,18 @@ namespace QBittorrent.Client.Tests
             await Utils.Retry(async () =>
             {
                 trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-                trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+                trackers
+                    .Select(x =>
+                    {
+                        if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                        {
+                            return uri;
+                        }
+
+                        return null;
+                    })
+                    .Where(x => x is not null)
+                    .Where(url => url.IsAbsoluteUri)
                     .Should().BeEquivalentTo(tracker2);
             });
 
@@ -1978,7 +2045,18 @@ namespace QBittorrent.Client.Tests
             await Utils.Retry(async () =>
             {
                 trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-                trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+                trackers
+                    .Select(x =>
+                    {
+                        if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                        {
+                            return uri;
+                        }
+
+                        return null;
+                    })
+                    .Where(x => x is not null)
+                    .Where(url => url.IsAbsoluteUri)
                     .Should().BeEquivalentTo(tracker1);
             });
 
@@ -1986,7 +2064,18 @@ namespace QBittorrent.Client.Tests
             await Utils.Retry(async () =>
             {
                 trackers = await Client.GetTorrentTrackersAsync(torrent.Hash);
-                trackers.Select(t => t.Url).Where(url => url.IsAbsoluteUri)
+                trackers
+                    .Select(x =>
+                    {
+                        if (Uri.TryCreate(x.Url, UriKind.Absolute, out var uri))
+                        {
+                            return uri;
+                        }
+
+                        return null;
+                    })
+                    .Where(x => x is not null)
+                    .Where(url => url.IsAbsoluteUri)
                     .Should().BeEmpty();
             });
         }
